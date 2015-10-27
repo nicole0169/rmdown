@@ -10,22 +10,22 @@ var BufferHelper = require("bufferhelper");
 
 // var target_url = "http://t66y.com";
 
+var page_start = process.argv[2];
+var page_end = process.argv[3];
+if (!page_start || !page_end || (page_end < page_start) || (page_start <= 0)) {
+    console.log('You must input the start page number and end page number.');
+    process.exit();
+}
+
 var chunks = [];
 var target_data = "";
 var target_result = "";
 var themereg = /Mywife|G-area/ig;
-var grapurllist = [
-    "/thread0806.php?fid=15&search=&page=6",
-    "/thread0806.php?fid=15&search=&page=7",
-    "/thread0806.php?fid=15&search=&page=8",
-    "/thread0806.php?fid=15&search=&page=9",
-    "/thread0806.php?fid=15&search=&page=10",
-    "/thread0806.php?fid=15&search=&page=11",
-    "/thread0806.php?fid=15&search=&page=12",
-    "/thread0806.php?fid=15&search=&page=13",
-    "/thread0806.php?fid=15&search=&page=14",
-    "/thread0806.php?fid=15&search=&page=15"
-];
+var target_url_prefix = "/thread0806.php?fid=15&search=&page=";
+var grapurllist = [];
+for (var i=page_start; i <= page_end; i++) {
+    grapurllist.push(target_url_prefix + i);
+}
 
 var options = {
     host: "t66y.com",
@@ -108,4 +108,3 @@ function array2str(data) {
     }
     return str;
 }
-
