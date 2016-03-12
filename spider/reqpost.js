@@ -55,6 +55,7 @@ var req = http.get(hash_url, function (res) {
                 "Content-Type": "multipart/form-data; boundary=" + boundaryKey,
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
                 //"Accept-Encoding": "gzip, deflate",
+                //gzip编码目前没有办法正常解压缩
                 "Accept-Language": "zh-CN,zh;q=0.8",
                 "Cache-Control": "max-age=0",
                 "Connection": "Keep-Alive",
@@ -76,7 +77,7 @@ var req = http.get(hash_url, function (res) {
                 //target_data = bufferHelper.toBuffer();
                 target_data = Buffer.concat(chunks);
                 var encoding = res2.headers['content-encoding'];
-                console.log(encoding);
+                // console.info('Header Encoding: ' + encoding);
                 if (target_data) {
                     if (encoding == "gzip") {
                         //解压gzip
