@@ -10,6 +10,8 @@ var fs = require("fs");
 var BufferHelper = require("bufferhelper");
 var moment = require("moment");
 var zlib = require("zlib");
+var createpath = require('./createpath');
+var savedir = '/usr/local/t';
 
 // 基础变量设置
 var target_data = "";
@@ -124,16 +126,26 @@ function getNow() {
     return moment().format('YYYYMMDDHHmmss_SSS');
 }
 
+function getDate() {
+    return moment().format('YYYYMMDD');
+}
+
 function save2File(str) {
     fs.writeFile(getNow() + '.torrent', str, function (err) {
         if (err) throw err;
     });
 }
 
+function getSaveDir() {
+    return savedir + '/' + getDate();
+}
+
 function save2FileByFilename(str, filename, cb) {
-    fs.writeFile(getNow() + '.torrent', str, function (err) {
-        if (err) throw err;
-        cb();
+     createpath.dc(getSaveDir(), '0777', function (path) {
+        fs.writeFile(path + '/' + getNow() + '.torrent', str, function (err) {
+            if (err) throw err;
+            cb();
+        });
     });
 }
 

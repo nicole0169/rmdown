@@ -38,23 +38,27 @@ function redisIsExists(tl, cb) {
             if (!reply) {
                 var newKv = {};
                 newKv[tmp_md5rkey] = tmp_rval;
-                client.hmset(rhash, newKv, function (err, reply) {
-                    if (!err) {
+                client.hmset(rhash, newKv, function (err2, reply2) {
+                    if (!err2) {
+                        console.log(tmp_rkey + ' has put redis!');
                         newJobArr.push(item);
-                        client.end();
+                        //client.end();
                         callback();
                     } else {
-                        client.end();
+                        console.error(err2);
+                        //client.end();
                         callback();
                     }
                 });
             } else {
-                client.end();
+                console.log(tmp_rkey + ' exist in redis!');
+                //client.end();
                 callback();
             }
         });
 
     }, function (err) {
+        client.end();
         cb(newJobArr);
     });
 }
