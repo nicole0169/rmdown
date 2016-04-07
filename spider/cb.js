@@ -1,5 +1,6 @@
 /**
  * Created by minmiao on 16/3/27.
+ *
  */
 var foo = function (str, cb) {
     if (str == 'cat'){

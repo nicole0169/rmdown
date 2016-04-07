@@ -105,8 +105,10 @@ function getRMtorrent(rmurl, savename, cb) {
                             });
                         } else {
                             //save2File(target_data);
-                            save2FileByFilename(target_data, savename, function () {
-                                cb(savename);
+                            var savertn = {'title':savename,'savefile':''};
+                            save2FileByFilename(target_data, savename, function (savefile) {
+                                savertn.savefile = savefile;
+                                cb(savertn);
                             });
                         }
                     }
@@ -142,9 +144,10 @@ function getSaveDir() {
 
 function save2FileByFilename(str, filename, cb) {
      createpath.dc(getSaveDir(), '0777', function (path) {
-        fs.writeFile(path + '/' + getNow() + '.torrent', str, function (err) {
+         var savefile = path + '/' + getNow() + '.torrent';
+        fs.writeFile(savefile, str, function (err) {
             if (err) throw err;
-            cb();
+            cb(savefile);
         });
     });
 }

@@ -8,7 +8,8 @@ var readfile = require('./readfile');
 var checkredis = require('./redisio');
 var getrm = require('./getrm');
 var downtor = require('./reqpost');
-var async = require("async");
+var async = require('async');
+var sendmail = require('./sendmail');
 
 //初始化参数为t66y.com的页码号
 var page_start = process.argv[2];
@@ -39,13 +40,23 @@ onepage.getTarget(function (filename) {
                     console.log('RMdown lists: ');
                     console.dir(rmdownlist);
                     if (rmdownlist.length > 0) {
+                        var mailattlist = [];
                         async.each(rmdownlist, function (item, callback) {
-                            downtor.getRMtorrent(item.down,item.title,function(torinfo){
-                                console.log(torinfo + ' download completed!');
+                            downtor.getRMtorrent(item.down, item.title, function (torinfo) {
+                                console.log(torinfo.title + ' download completed!');
+                                var mailatt = {'path': torinfo.savefile};
+                                mailattlist.push(mailatt);
                                 callback();
                             })
                         }, function (err) {
                             console.log('All torrent download completed!');
+                            console.dir(mailattlist);
+                            if (mailattlist.length > 0) {
+                                //发送邮件
+                                sendmail.sendmail(mailattlist, function () {
+                                    console.log('All done!');
+                                });
+                            }
                         });
                     }
                 })
